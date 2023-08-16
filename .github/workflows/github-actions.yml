@@ -61,15 +61,27 @@ jobs:
       # - name: Build with Gradle
       #   run: ./gradlew build
 
-      # docker build & push to production
-      - name: Docker build & push to prod
+      # docker login
+      - name: Docker build
         if: contains(github.ref, 'main')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker-compose up --build
-          docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
 
-      ## deploy to production
+      # .env생성
+      - name: Setting .env
+        run: |
+          echo "${{ secrets.ENV }}" >> .env 
+          cat .env
+
+      # Docker build & push to production
+      - name: Docker push to prod
+        if: contains(github.ref, 'main')
+        run: |
+          docker-compose -f docker-compose.yml build
+          docker images
+          docker-compose -f docker-compose.yml push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
+      #    docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
+      # deploy to production
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
         id: deploy-prod
