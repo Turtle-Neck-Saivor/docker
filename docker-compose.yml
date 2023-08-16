@@ -23,3 +23,21 @@ services:
       - ./frontend/:/frontend
       - ./frontend/dist:/frontend/dist
       - ./frontend/node_modules:/frontend/node_modules
+
+  # db:
+  #   container_name: db-mysql
+  #   image: mysql:8.0
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #   volumes:
+  #     - ./mysql:/var/lib/mysql
+  #   command:
+  #     - "--character-set-server=utf8mb4"
+  #     - "--collation-server=utf8mb4_unicode_ci"
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+  #     timeout: 20s
+  #     retries: 10
