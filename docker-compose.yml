@@ -1,5 +1,21 @@
 version: "3.8"
 services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx/.
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - static_volume:/backend/static # <-- bind the static volume
+    networks:
+      - backend_network
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+
   backend:
     build:
       context: ./backend
