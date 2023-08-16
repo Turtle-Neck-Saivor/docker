@@ -1,16 +1,16 @@
 version: "3.8"
 services:
-  nginx:
-    container_name: nginx
-    build:
-      context: ./nginx/.
-      dockerfile: Dockerfile
-    ports:
-      - 8000:80
-    depends_on:
-      - backend
-      - frontend
-    restart: always
+  # nginx:
+  #   container_name: nginx
+  #   build:
+  #     context: ./nginx/.
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8000:80
+  #   depends_on:
+  #     - backend
+  #     - frontend
+  #   restart: always
 
   backend:
     build:
@@ -25,16 +25,16 @@ services:
     depends_on:
       - frontend
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - 80:80
-    volumes:
-      - ./frontend/:/frontend
-      - ./frontend/dist:/frontend/dist
-      - ./frontend/node_modules:/frontend/node_modules
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - ./frontend/:/frontend
+  #     - ./frontend/dist:/frontend/dist
+  #     - ./frontend/node_modules:/frontend/node_modules
 
   # db:
   #   container_name: db-mysql
