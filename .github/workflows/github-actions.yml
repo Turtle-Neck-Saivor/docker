@@ -79,15 +79,17 @@ jobs:
       #   run: |
       #     docker-compose -f ./docker-compose.yml build
       #     docker images
-      #     docker-compose -f ./docker-compose.yml push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
-      #    docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
+      #     docker-compose -f ./docker-compose.yml push ${{ secrets.DOCKER_USERNAME }}/cowabugi
+      #    docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi
 
-      # Docker build & push to production
-      - name: Docker push to prod
+      # docker build & push to production
+      - name: Docker build & push to prod
         if: contains(github.ref, 'main')
         run: |
-          docker-compose -f ./docker-compose.yml push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
-          docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -f ./backend/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/cowabugi .
+          docker build -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/cowabugi .
+          docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi
 
       # deploy to production
       - name: Deploy to prod
@@ -102,6 +104,6 @@ jobs:
           script: |
             sudo docker ps
             sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/cowabugi
             docker-compose up --build
             sudo docker image prune -f
