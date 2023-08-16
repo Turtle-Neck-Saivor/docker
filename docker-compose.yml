@@ -22,8 +22,8 @@ services:
       - ./backend/:/backend/
     environment:
       - WAIT_HOSTS=frontend:80
-    depends_on:
-      - frontend
+    # depends_on:
+    #   - frontend
 
   # frontend:
   #   build:
