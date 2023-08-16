@@ -82,6 +82,13 @@ jobs:
       #     docker-compose -f ./docker-compose.yml push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
       #    docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
 
+      # Docker build & push to production
+      - name: Docker push to prod
+        if: contains(github.ref, 'main')
+        run: |
+          docker-compose -f ./docker-compose.yml push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
+          docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi-prod
+
       # deploy to production
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
