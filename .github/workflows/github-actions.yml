@@ -75,6 +75,12 @@ jobs:
           docker build --no-cache -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/cowabugi .
           docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi
 
+      # update submodule
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+          
       # deploy to production
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
