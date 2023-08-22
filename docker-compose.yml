@@ -1,16 +1,16 @@
 version: "3.8"
 services:
-  nginx:
-    container_name: nginx
-    build:
-      context: ./nginx/.
-      dockerfile: Dockerfile
-    ports:
-      - 8000:80
-    depends_on:
-      - backend
-      - frontend
-    restart: always
+  # nginx:
+  #   container_name: nginx
+  #   build:
+  #     context: ./frontend/.
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8000:80
+  #   depends_on:
+  #     - backend
+  #     - frontend
+  #   restart: always
 
   backend:
     build:
