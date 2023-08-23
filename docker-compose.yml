@@ -1,45 +1,59 @@
-version: "3.8"
+version: "3.1"
+
 services:
 
   db:
     image: mysql:8.0
     ports:
-      - "3307:3306"
+      - "3306:3306"
     environment:
-      MYSQL_ROOT_HOST: root
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: turtle-neck-savior-dev
+      MYSQL_USER: turtle
+      MYSQL_PASSWORD: 1234
     volumes:
-      - ./mysql:/var/lib/mysql
+      - mysql_volume:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     command:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 20s
-      retries: 10
+    networks:
+      - turtle
 
   backend:
     build:
       context: ./backend/
       dockerfile: Dockerfile
+    environment:
+      - MYSQL_USER=turtle
+      - MYSQL_PASSWORD=1234
     ports:
       - "8080:8080"
     volumes:
       - ./backend/:/backend/
-    environment:
-      - WAIT_HOSTS=frontend:80
     depends_on:
-      - frontend
       - db
+    networks:
+      - turtle
 
   frontend:
     build:
       context: ./frontend/
       dockerfile: Dockerfile
     ports:
-      - 80:80
+      - "80:80"
     volumes:
       - ./frontend/:/frontend/
       - ./frontend/dist:/frontend/dist
       - ./frontend/node_modules:/frontend/node_modules
+    depends_on:
+      - backend
+    networks:
+      - turtle
+
+networks:
+  turtle:
+    driver: bridge
+
+volumes:
+  mysql_volume:
