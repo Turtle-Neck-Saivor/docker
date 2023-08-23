@@ -77,8 +77,10 @@ jobs:
         if: contains(github.ref, 'main')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f ./backend/Dockerfile --no-cache -t ${{ secrets.DOCKER_USERNAME }}/cowabugi .
-          docker build -f ./frontend/Dockerfile --no-cache -t ${{ secrets.DOCKER_USERNAME }}/cowabugi .
+          docker build -f ./backend/Dockerfile --no-cache -t ${{ secrets.DOCKER_USERNAME }}/cowabugi/backend .
+          docker build -f ./frontend/Dockerfile --no-cache -t ${{ secrets.DOCKER_USERNAME }}/cowabugi/frontend .
+          docker-compose build
+          docker images
           docker push ${{ secrets.DOCKER_USERNAME }}/cowabugi
 
       # deploy to production
@@ -95,5 +97,5 @@ jobs:
             sudo docker ps
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/cowabugi
-            docker-compose up --build .
+            docker-compose up --build 
             sudo docker image prune -f
