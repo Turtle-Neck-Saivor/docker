@@ -95,5 +95,5 @@ jobs:
             sudo docker ps
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/cowabugi
-            docker-compose up --build .
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/cowabugi
             sudo docker image prune -f
